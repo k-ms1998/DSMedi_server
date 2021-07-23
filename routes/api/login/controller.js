@@ -15,6 +15,7 @@ exports.login = (req,res) => {
     const url = 'https://oapi'+zone+'.ecount.com/OAPI/V2/OAPILogin';
     const testUrl = 'https://sboapi'+zone+'.ecount.com/OAPI/V2/OAPILogin';
     
+    var sess = req.session;
 
     let zoneOptions = {
         uri : testUrl,
@@ -32,10 +33,14 @@ exports.login = (req,res) => {
     }
 
     requestApi(zoneOptions, function(err, fin, body){
-        //console.log(body)
         res.json({
             result: body
         });
+        if(!err){
+            sess.session_id = body.Data.Datas.SESSION_ID
+            sess.save() /**Imporant **/
+            console.log(body.Data.Datas.SESSION_ID)
+        }
     })
 }
 
