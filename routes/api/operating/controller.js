@@ -106,3 +106,74 @@ exports.quotation = (req, res) => {
         })
     })
 }
+
+exports.save_order = (req, res) => {
+    const testUrl = 'https://sboapi'+keys.zone+'.ecount.com/OAPI/V2/SaleOrder/SaveSaleOrder?SESSION_ID='+req.session.session_id;
+    const url = 'https://oapi'+keys.zone+'.ecount.com/OAPI/V2/SaleOrder/SaveSaleOrder?SESSION_ID='+req.session.session_id;
+    const cust = req.body.cust;
+    const wh_cd = req.body.wh_cd;
+    const prod_cd = req.body.prod_cd;
+    const qty = req.body.qty
+
+    let orderOptions = {
+        uri: testUrl,
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        json:{
+            "SaleOrderList" : [{
+                "Line": 0,
+                "BulkDatas": {
+                    "UPLOAD_SER_NO" : "",
+                    "CUST": cust,
+                    "WH_CD": wh_cd,
+                    "PROD_CD": prod_cd,
+                    "QTY" : qty
+                }
+            }]
+        }
+    }
+
+    requrestApi(orderOptions, function(err, fin, apiBody){
+        if(!err){
+            res.json({
+                result: apiBody
+            })
+        }
+    })
+}
+
+exports.save_sale = (req, res) => {
+    const testUrl = 'https://sboapi'+keys.zone+'.ecount.com/OAPI/V2/Sale/SaveSale?SESSION_ID='+req.session.session_id;
+    const url = 'https://oapi'+keys.zone+'.ecount.com/OAPI/V2/Sale/SaveSale?SESSION_ID='+req.session.session_id;
+
+
+    let saleOptions = {
+        uri: testUrl,
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        json:{
+            "SaleList":[{
+                "Line": "0",
+                "BulkDatas": {
+                    "UPLOAD_SER_NO" : "",
+                    "WH_CD": req.body.wh_cd,
+                    "PROD_CD": req.body.prod_cd,
+                    "QTY": req.body.qty
+                }
+            }]
+        }
+    }
+
+
+    requrestApi(saleOptions, function(err, fin, apiBody){
+        if(!err){
+            res.json({
+                result: apiBody
+            })
+        }
+    })
+}
