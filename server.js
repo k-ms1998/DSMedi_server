@@ -12,8 +12,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-app.use("/api", require("./routes/api"));
-app.get('/', (req, res) => {
+app.use("/", require("./routes"));
+app.get("/start", (req, res) => {
     res.send('Hello Node');
 });
 
