@@ -11,23 +11,11 @@ const test_keys={
 }
 
 exports.getData = (async(req, res) => {
-    await console.log("Start")
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(keys.address);
+   //Test
+   await page.goto(keys.orderList_address)
+   await page.select("#productSearchType", "PRODUCT_NAME")
+   await page.type("#productSearchTypeVal", "혈당측정지");
 
-    //await page.click("#memberId");
-    await page.type("#memberId",keys.id);
-    await page.type("#memberPassword", keys.password);
-    await page.click("#btnLogin");
-    await page.waitForNavigation();
-    
-    await console.log("Done 4")
-    await page.screenshot({path: './hmpmallLogin.png'})
-    await console.log("Done")
-    await browser.close()
-
-    await res.json({
-        result: "Login Successful"
-    })
+   await page.click("[class='srch_btn']")
+   await page.click("[class='btn_a _btn_excel']")
 })
