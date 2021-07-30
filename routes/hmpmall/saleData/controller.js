@@ -11,11 +11,12 @@ const test_keys={
 }
 
 exports.getData = (async(req, res) => {
-   //Test
-   await page.goto(keys.orderList_address)
-   await page.select("#productSearchType", "PRODUCT_NAME")
-   await page.type("#productSearchTypeVal", "혈당측정지");
+    await page.goto(keys.orderList_address)
+    await page.select("#productSearchType", "PRODUCT_NAME")
+    await page.type("#productSearchTypeVal", "혈당측정지");
+    await page.click("[class='per']")
+    await page.click("#orderProductTab")
 
-   await page.click("[class='srch_btn']")
-   await page.click("[class='btn_a _btn_excel']")
+    await page.click("[class='srch_btn']")
+    await page.click("[class='btn_a _btn_excel']")
 })

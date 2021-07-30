@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
-const downloadPath = path.resolve("./downloaded_data/hmp")
+const { response } = require('express')
+const __downloadDir = path.resolve("./downloaded_data/hmp")
 
 const keys={
     "address": process.env.hmp_address,
@@ -22,7 +23,7 @@ exports.login = (async(req, res) => {
     const page = await browser.newPage();
     await page._client.send("Page.setDownloadBehavior", {
         behavior: "allow",
-        downloadPath: downloadPath
+        downloadPath: __downloadDir
     });
 
     //Move to website
@@ -41,44 +42,47 @@ exports.login = (async(req, res) => {
     //await console.log(req.session.hmp_cookies[0]);
 
 
-    //Test
+    //Get sale data
     await page.goto(keys.orderList_address)
     await page.select("#productSearchType", "PRODUCT_NAME")
     await page.type("#productSearchTypeVal", "혈당측정지");
+    await page.click("[class='per']")
+    await page.click("#orderProductTab")
 
     await page.click("[class='srch_btn']")
     await page.click("[class='btn_a _btn_excel']")
-    //await page.screenshot({path: './hmpmallOrderList.png'});
+
+    await page.on("response", async(response) => {
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        //When a download is triggered by a page, it is donw using the 'Content-Disposition' header
+        const disposition = response.headers()['content-disposition']
+        if(disposition){
+            //console.log("Download Triggered");
+            //console.log(response.headers()['content-disposition'])
+            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            var matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) { 
+                var filename = matches[1].replace(/['"]/g, '');
+                var filenameSplit = filename.split(".");
+                var file_extension = filenameSplit[filenameSplit.length-1]
+
+                let ts = Date.now(); //Date.now()는 UTC 기준; 한국은 UTC+9hours; 9 hours == 32400000 ms
+                let dateObj = new Date(ts);
+
+                var newFileName = dateObj.getFullYear()+'_'+(dateObj.getMonth()+1)+'_'+dateObj.getDate()
+
+                fs.rename(__downloadDir+'/'+filename, __downloadDir+'/'+ newFileName +'.'+file_extension, (err) => {
+                    if(err)
+                        console.log(err)
+                })
+            }
+        }
+
+    })
+    
 
     await res.json({
         result: "Login Successful"
     })
 })
 
-/*
-exports.login = (req, res) => {
-    
-    console.log(keys.address)
-    let loginOptions = {
-        uri: keys.address,
-        method: "POST",
-        headers:{
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        form:{
-            "memberId": keys.id,
-            "memberPassword": keys.password
-        } 
-    }
-
-    request(loginOptions, function(err, fin, body){
-        if(err){
-            console.log(err)
-        }
-        else{
-            res.json({
-                result: body
-            })
-        }
-    })
-}*/
