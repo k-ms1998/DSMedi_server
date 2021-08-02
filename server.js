@@ -21,4 +21,4 @@ app.get("/start", (req, res) => {
 });
 
 
-app.listen(3030, 'localhost')
+app.listen(3000, 'localhost')
