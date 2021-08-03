@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
-const __downloadDir = path.resolve("./downloaded_data/hmp")
 
 const keys={
     "address": process.env.hmp_address,
@@ -19,10 +18,6 @@ exports.login = (async(req, res) => {
         headless: true
     });
     const page = await browser.newPage();
-    await page._client.send("Page.setDownloadBehavior", {
-        behavior: "allow",
-        downloadPath: __downloadDir
-    });
 
     //Move to website
     await page.goto(keys.address);

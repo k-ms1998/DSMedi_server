@@ -2,8 +2,9 @@ const request = require('request')
 const puppeteer = require('puppeteer')
 const path = require('path')
 const fs = require('fs')
+const processData = require('../../process/controller')
 
-const __downloadDir = path.resolve("./downloaded_data/hmp")
+const __downloadDir = path.resolve("./raw_data/hmp")
 
 const keys={
     "address": process.env.hmp_orderListAddress,
@@ -42,7 +43,7 @@ exports.getData = (async(req, res) => {
 
         await page.on("response", async(response) => {
             await new Promise(resolve => setTimeout(resolve, 2000))
-            //When a download is triggered by a page, it is donw using the 'Content-Disposition' header
+            //When a download is triggered by a page, it is done using the 'Content-Disposition' header
             const disposition = response.headers()['content-disposition']
             if(disposition){
                 //console.log("Download Triggered");
@@ -59,16 +60,18 @@ exports.getData = (async(req, res) => {
 
                     var newFileName = dateObj.getFullYear()+'_'+(dateObj.getMonth()+1)+'_'+dateObj.getDate()
 
-                    fs.rename(__downloadDir+'/'+filename, __downloadDir+'/'+ newFileName +'.'+file_extension, (err) => {
+                    fs.rename(__downloadDir+'/'+filename, __downloadDir+'/'+ newFileName+'.'+file_extension, async(err) => {
                         if(err)
                             console.log(err)
+                        else
+                            await processData.toCsv(__downloadDir, "hmp", newFileName, file_extension);
                     })
                 }
             }
-
+            
         })
 
-        res.status(200).json({
+        await res.status(200).json({
             result: "HMP Sale Data Download Successful"
         })
     }

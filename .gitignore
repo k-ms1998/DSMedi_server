@@ -1,3 +1,4 @@
-.env
-downloaded_data/
 node_modules/
+.env
+raw_data/
+parsed_data/
