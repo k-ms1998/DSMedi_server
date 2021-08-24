@@ -4,10 +4,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const { sequelize } = require("./models");
 
 const app = express()
 
-
+sequelize.sync();
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(session({

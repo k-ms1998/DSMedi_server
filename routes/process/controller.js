@@ -1,6 +1,7 @@
 const fs = require('fs')
 const xlsx = require('xlsx')
 const __csvFileDir = "./parsed_data"
+const {spawn} = require('child_process')
 
 exports.getData = (req, res) => {
     const dir = req.body.dir
@@ -12,7 +13,15 @@ exports.getData = (req, res) => {
         })
     }
     else{
-        console.log(dir, date)
+        const pyScript = spawn('python', ['./saledata_to_mysql.py', dir])
+        pyScript.stdout.on('data', (data)=>{
+            console.log('Received data: '+data.toString())
+        })
+        var raw_col = []
+        var idx_col = []
+        if(dir=='hmp'){
+            raw_col = ['주문번호', '거래처명', '거래처코드', '상품마스터ID', '상품명']
+        }
     }
 }
 
