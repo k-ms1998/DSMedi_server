@@ -16,7 +16,8 @@ try{
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
-db.bgs = require('./bgs')(sequelize, Sequelize);
+//db.bgs = require('./bgs')(sequelize, Sequelize);  //Deprecated
+db.stdProducts = require('./stdProducts')(sequelize, Sequelize);
 db.saleData = require('./saleData')(sequelize, Sequelize);
 db.proMatch = require('./proMatch')(sequelize, Sequelize);
 
