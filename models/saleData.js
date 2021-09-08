@@ -6,20 +6,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true
         },
-        orderId:{
+        order_id:{
             type: DataTypes.STRING,
             primaryKey: true
         },
         storeName:{
             type: DataTypes.STRING
         },
-        storeId:{
+        store_id:{
             type: DataTypes.STRING
         },
         productName:{
-            type: DataTypes.STRING
-        },
-        productId:{
             type: DataTypes.STRING
         }
     },{

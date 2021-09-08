@@ -4,7 +4,7 @@ const { sequelize } = require(".");
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('stdProducts', {
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(30),
             allowNull: false,
             unique: true,
             primaryKey: true

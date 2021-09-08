@@ -8,12 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        erp_code:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        mall_name:{
-            type: DataTypes.STRING,
+        mall_id:{
+            type: DataTypes.STRING(30),
             primaryKey: true
         }
     },{

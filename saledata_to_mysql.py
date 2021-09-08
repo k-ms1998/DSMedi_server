@@ -18,7 +18,7 @@ if mall == 'hmp':
     data = pd.read_excel('./raw_data/hmp/2021_8_3.xlsx')
     df = pd.DataFrame(data, columns = ['주문번호', '거래처명', '거래처코드', '상품마스터ID', '상품명'])
     df.insert(loc=0, column='mall', value='hmp')
-    df = df.rename(columns={'주문번호':'orderId', '거래처명':'storeName', '거래처코드':'storeId','상품마스터ID':'productId', '상품명':'productName'})
+    df = df.rename(columns={'주문번호':'order_id', '거래처명':'storeName', '거래처코드':'store_id','상품마스터ID':'product_id', '상품명':'productName'})
     df.to_sql('saledata', engine, if_exists='append', index=False)
     print('Data Appended')
 

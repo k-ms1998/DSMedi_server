@@ -15,13 +15,11 @@ exports.getData = (req, res) => {
     else{
         const pyScript = spawn('python', ['./saledata_to_mysql.py', dir])
         pyScript.stdout.on('data', (data)=>{
-            console.log('Received data: '+data.toString())
+            //console.log('Received data: '+data.toString())
+            res.status(200).json({
+                result: 'Received data: '+data.toString()
+            })
         })
-        var raw_col = []
-        var idx_col = []
-        if(dir=='hmp'){
-            raw_col = ['주문번호', '거래처명', '거래처코드', '상품마스터ID', '상품명']
-        }
     }
 }
 

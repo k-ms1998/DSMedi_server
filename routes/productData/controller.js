@@ -1,5 +1,7 @@
 const models = require('../../models')
-const sequelize = require('sequelize')
+const sequelize = require('sequelize');
+const stdProducts = require('../../models/stdProducts');
+const proMatch = require('../../models/proMatch');
 
 const Op = sequelize.Op;
 
@@ -39,5 +41,80 @@ exports.showProduct = async (req, res) => {
         }
 
     }
+}
+
+exports.updateSn = (req, res) => {
+    //Update the serial number for products
+    //Requires the name of the product, product ID and serial number
+    if(!req.body.name || !req.body.id || !req.body.sn){
+        res.status(400).json({
+            result: "Please input the name, product ID and sn"
+        })
+    }
+    else{
+        const name = req.body.name;
+        const id = req.body.id;
+        const sn = req.body.sn;
+        models.stdProducts.findOne({
+            where:{
+                id: id,
+                name: name
+            }
+        }).then(result => {
+            if(!result){
+                res.status(400).json({
+                    result: "Empty Result"
+                })
+            }
+            else{
+                let updated_values = {
+                    name: name,
+                    id : id,
+                    sn: sn
+                }
+                result.update(updated_values)
+                            .then(updated_result => {
+                                res.status(200).json({
+                                    result: updated_result
+                                })
+                            })
+            }
+        }).catch(err => {
+            res.status(400).json({
+                error: err
+            })
+        })
+    }
+}
+
+exports.matchSn = (req, res) => {
+    //Matches the sale data with the serial number of that product
+
+    //SELECT *FROM saledata LEFT JOIN promatches ON productId = mall_id LEFT JOIN stdproducts ON erp_id = id;
+    models.saleData.findAll({
+        include:[
+            {
+                model: models.proMatch,
+                required: false
+            },
+            {
+                model: models.proMatch,
+                include: [{
+                    model: models.stdProducts,
+                    required: false
+                }],
+                required: false
+            }
+        ]
+    }).then(result => {
+        res.json({
+            result: result
+        })
+    }).catch(err => {
+        console.log(err)
+        res.json({
+            error: err
+        })
+    })
 
 }
