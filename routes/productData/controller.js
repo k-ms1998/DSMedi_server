@@ -90,25 +90,34 @@ exports.updateSn = (req, res) => {
 exports.matchSn = (req, res) => {
     //Matches the sale data with the serial number of that product
 
-    //SELECT *FROM saledata LEFT JOIN promatches ON productId = mall_id LEFT JOIN stdproducts ON erp_id = id;
+    //SELECT *FROM saledata LEFT JOIN promatches ON product_id = mall_id LEFT JOIN stdproducts ON erp_id = id;
     models.saleData.findAll({
+        attributes:[
+            'mall', 'storeName'
+        ],
         include:[
             {
                 model: models.proMatch,
-                required: false
+                required: false,
+                attributes:[
+                    ['erp_id', 'id']
+                ]
             },
             {
                 model: models.proMatch,
                 include: [{
                     model: models.stdProducts,
-                    required: false
+                    required: false,
+                    attributes:[
+                        'name', 'sn'
+                    ]
                 }],
                 required: false
             }
         ]
     }).then(result => {
         res.json({
-            result: result
+            info: result
         })
     }).catch(err => {
         console.log(err)
