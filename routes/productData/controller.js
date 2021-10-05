@@ -1,7 +1,5 @@
 const models = require('../../models')
 const sequelize = require('sequelize');
-const stdProducts = require('../../models/stdProducts');
-const proMatch = require('../../models/proMatch');
 
 const Op = sequelize.Op;
 
@@ -16,7 +14,7 @@ exports.showProduct = async (req, res) => {
         res.status(400).json({
             result: "Please insert at least one of the required information"
         })
-    }
+    } 
     else{
         const name = req.body.name;
         const type = req.body.type;
@@ -125,5 +123,4 @@ exports.matchSn = (req, res) => {
             error: err
         })
     })
-
 }
