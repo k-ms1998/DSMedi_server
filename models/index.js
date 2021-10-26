@@ -3,8 +3,20 @@ const Sequelize = require('sequelize')
 
 const env = process.env.NODE_ENV || 'development';
 const config = require(path.join(__dirname, '..', 'config', 'config.js'))[env];
+const mongoose = require('mongoose');
 
 var db = {}
+db.mongoose = mongoose;
+db.mongoose.connect(config.mongoUri)
+                .then(() => {
+                    console.log("MongoDB Connected");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
+db.warehouse = require('./warehouse')(mongoose)
+
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config)
 try{
