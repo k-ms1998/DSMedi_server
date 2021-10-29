@@ -22,7 +22,9 @@ exports.editWarehouse = (req, res) => {
     var id = req.body.x+"_"+req.body.y
     var items = req.body.items
 
-    models.warehouse.findOneAndUpdate({_id: id}, {
+    models.warehouse.findOneAndUpdate({
+        _id: id
+    },{
         item: items
     },{
         new: true

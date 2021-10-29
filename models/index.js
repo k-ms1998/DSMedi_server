@@ -16,6 +16,7 @@ db.mongoose.connect(config.mongoUri)
                 })
 
 db.warehouse = require('./warehouse')(mongoose)
+db.inventory = require('./inventory')(mongoose)
 
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config)
