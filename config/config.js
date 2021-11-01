@@ -13,7 +13,7 @@ module.exports = {
         username: "root",
         password: "0000",
         database: "DSMedi",
-        host: "localhost",
+        host: "ec2-3-134-89-163.us-east-2.compute.amazonaws.com",
         dialect: "mysql",
         mongoUri: "mongodb://localhost:27017/dsmedi"
     }
