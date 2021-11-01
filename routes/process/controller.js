@@ -22,9 +22,19 @@ exports.getData = (req, res) => {
         })
     }
 }
-
 exports.toCsv = (dir, fPre, fName, fExtension) => {
     var readFileObj = xlsx.readFile(dir + '\\' + fName + '.' + fExtension)
     var csvFile = fPre+"_"+fName+".csv"
     xlsx.writeFile(readFileObj, __csvFileDir+'/'+csvFile, {bookType: "csv"})
+}
+
+exports.calPath = (req, res) => {
+    //Input an array of coordinates
+    //coodinate = [[x1,y1], [x2,y2], [x3,y3]...]
+    var coor = req.body.coordiante
+    
+        
+
+
+
 }
