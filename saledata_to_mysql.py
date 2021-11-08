@@ -13,12 +13,13 @@ dbname=os.getenv('DB_DATABASE')
 engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 				.format(host=hostname, db=dbname, user=uname, pw=pwd))
 mall = sys.argv[1]
-mall = 'hmp'
+date = sys.argv[2]
 if mall == 'hmp':
-    data = pd.read_excel('./raw_data/hmp/2021_8_3.xlsx')
-    df = pd.DataFrame(data, columns = ['주문번호', '거래처명', '거래처코드', '상품마스터ID', '상품명'])
+    data = pd.read_excel('./raw_data/hmp/'+date+'.xlsx')
+    #data = pd.read_excel('./raw_data/hmp/2021_8_3.xlsx')
+    df = pd.DataFrame(data, columns = ['주문번호', '거래처명', '거래처코드', '상품마스터ID', '상품명', '확정수량'])
     df.insert(loc=0, column='mall', value='hmp')
-    df = df.rename(columns={'주문번호':'order_id', '거래처명':'storeName', '거래처코드':'store_id','상품마스터ID':'product_id', '상품명':'productName'})
+    df = df.rename(columns={'주문번호':'order_id', '거래처명':'storeName', '거래처코드':'store_id','상품마스터ID':'product_id', '상품명':'productName', '확정수량':'amount'})
     df.to_sql('saledata', engine, if_exists='append', index=False)
     print('Data Appended')
 

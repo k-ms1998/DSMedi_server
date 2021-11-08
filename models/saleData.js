@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         productName:{
             type: DataTypes.STRING
+        },
+        amount:{
+            type: DataTypes.INTEGER
         }
     },{
         timestamps: false
