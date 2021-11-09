@@ -7,3 +7,8 @@ product_names.xlsx
 test_warehouse.txt
 process.env
 calPath.py
+# Elastic Beanstalk Files
+.elasticbeanstalk/
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
