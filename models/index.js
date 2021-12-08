@@ -40,7 +40,10 @@ db.proMatch.belongsTo(db.stdProducts, {
 });
 db.saleData.belongsTo(db.proMatch, {
     targetKey: 'mall_id',
-    foreignKey: 'product_id'
+    foreignKey: {
+        name: 'product_id',
+        primaryKey: true
+    }
 });
 db.stdProducts.hasOne(db.proMatch, {
     as: 'sp',

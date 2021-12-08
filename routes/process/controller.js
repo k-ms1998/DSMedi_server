@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const xlsx = require('xlsx')
 const __csvFileDir = "./parsed_data"
 const {spawn} = require('child_process')
@@ -19,18 +20,27 @@ const wHouseMap = [
                 ]
 
 exports.getData = (req, res) => {
-    const dir = req.body.dir
-    const date = req.body.date
+    var dir = req.body.dir
+    var date = req.body.date
+    var type = req.body.type
+    if(type==""){
+        type="전체"
+    }
+    var time = req.body.time
 
-    if(!dir || !date){
+
+    if(!dir || !date || !time){
         res.status(400).json({
             error: "Please input all the required information"
         })
     }
     else{
-        fs.access('./raw_data/'+dir+'/'+date+'.xlsx', (err) => {
+        var fName = path.resolve('raw_data', dir, date+'_'+type+'_'+time+'.xlsx')
+        // var fName = path.join(date,'_',time,'.xlsx')
+        console.log(fName)
+        fs.access(fName, (err) => {
             if(!err){
-                spawn('python', ['./saledata_to_mysql.py', dir, date])
+                spawn('python', ['./saledata_to_mysql.py', dir, fName])
                     .stdout.on('data', (data)=>{
                         //console.log('Received data: '+data.toString())
                         res.status(200).json({

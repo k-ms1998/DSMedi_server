@@ -51,7 +51,7 @@ exports.getData = (async(req, res) => {
 
         //console.log(req.session.hmp_cookies)
         const browser = await puppeteer.launch({
-            headless: false
+            headless: true
         });
         const page = await browser.newPage();
         await page._client.send("Page.setDownloadBehavior", {
